@@ -29,20 +29,18 @@ export default function HomeScreen({ navigation }) {
           onPress={handleSignOut}
         />
       </View>
-      <Text style={styles.text}>Your UID is: {user.uid} </Text>
-      <Text style={styles.text}> Hello ! This is Home Screen </Text>
-      <View style={styles.row}>
-        <RNButton
-          title="Napotnica"
-          size = {50}
-          onPress={() => navigation.navigate('Napotnica')}
-        />
-        <RNButton
-          title="Samoplačniško"
-          size = {50}
-          onPress={() => navigation.navigate('Samoplacnik')}
-        />
-      </View>
+      <Text style={styles.text}>THIS IS NAPOTNICA !</Text>
+      <RNButton
+        title="HOME"
+        size = {50}
+        onPress={() => navigation.navigate('Home')}
+      />
+      
+      <RNButton
+        title="Samoplačniško"
+        size = {50}
+        onPress={() => navigation.navigate('Samoplacnik')}
+      />
     </View>
   );
 }
