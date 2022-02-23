@@ -28,10 +28,19 @@ export default function LoginScreen({ navigation }) {
   const onLogin = async () => {
     try {
       if (email !== '' && password !== '') {
-        await auth.signInWithEmailAndPassword(email, password);
+        /*firebase.auth().onAuthStateChanged(function(user) { 
+          if (user.emailVerified) {
+            console.log('Email is verified');
+          }
+          else {
+            console.log('Email is not verified');
+          }
+        });*/
+        auth.signInWithEmailAndPassword(email, password);
       }
     } catch (error) {
       setLoginError(error.message);
+      alert('Sorry it seems you entered wrong email or/and password');
     }
   };
 
