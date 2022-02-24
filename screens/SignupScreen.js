@@ -58,7 +58,7 @@ export default function SignupScreen({ navigation }) {
       alert('Sorry it seems you entered wrong email or/and password');
       console.log(error);
     }
-    auth.signOut();
+    //auth.signOut();
   };
 
   return (

@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
+import { useState } from 'react';
 import { TextInput, StyleSheet, Text, View, Button as RNButton } from 'react-native';
 
 import { Button, IconButton } from '../components';
@@ -7,9 +8,39 @@ import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
 
 const auth = Firebase.auth();
+const up = Firebase.firestore();
+const datum = new Date().toLocaleString()
 
 export default function Samoplacnik({ navigation }) {
+  const [name, setName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [post, setPost] = useState('');
+  const [obiski, setObiski] = useState('');
   const { user } = useContext(AuthenticatedUserContext);
+  const onHandleAppointment = async () => {
+    try{
+      if (name !== '' && lastname !== '' && address !== '' && post !== '' && obiski !== ''){
+        up
+        .collection("Napotnica")
+        .doc(auth.currentUser.uid)
+        .set({name,
+          lastname,
+          address,
+          post,
+          obiski,
+          datum
+        })
+        .then(() => {
+          alert ('Napotnica oddana');
+          console.log("Appointment added!");
+        });
+      } 
+    }catch (error) {
+    alert ('Sorry wrong values.');
+    console.log(error);
+    }
+  }
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -17,6 +48,8 @@ export default function Samoplacnik({ navigation }) {
       console.log(error);
     }
   };
+
+  
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
@@ -33,28 +66,52 @@ export default function Samoplacnik({ navigation }) {
         style={styles.input}
         placeholder="Ime"
         keyboardType="numeric"
+        textContentType='name'
+        value={name}
+        onChangeText={text => setName(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Priimek"
         keyboardType="numeric"
+        textContentType='name'
+        value={lastname}
+        onChangeText={text => setLastName(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Ulica in hišna številka"
         keyboardType="numeric"
+        textContentType='streetAddressLine1'
+        value={address}
+        onChangeText={text => setAddress(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="pošta in poštna številka"
         keyboardType="numeric"
+        textContentType='streetAddressLine2'
+        value={post}
+        onChangeText={text => setPost(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="število obiskov"
         keyboardType="number-pad"
+        value={obiski}
+        onChangeText={text => setObiski(text)}        
       />
       <Text style={styles.text}>THIS IS SAMOPLACNIK ! </Text>
+      <Button
+        onPress={onHandleAppointment}
+        backgroundColor='#f57c00'
+        title='Pošlji Napotnico'
+        tileColor='#fff'
+        titleSize={20}
+        containerStyle={{
+          marginBottom: 24
+        }}
+      />
       <RNButton
         title="Napotnica"
         size = {50}
