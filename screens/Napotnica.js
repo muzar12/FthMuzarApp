@@ -1,15 +1,50 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
-import { TextInput, StyleSheet, Text, View, Button as RNButton } from 'react-native';
+import { TextInput, StyleSheet, Text, View, Button as RNButton, Platform } from 'react-native';
+import { useState } from 'react';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Button, IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
 
 const auth = Firebase.auth();
+const up = Firebase.firestore();
+const datum = new Date().toLocaleString()
 
 export default function HomeScreen({ navigation }) {
+  const [name, setName] = useState('');
+  const [lastname, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [post, setPost] = useState('');
+  const [ZZZS, setZZZS] = useState('');
+  var prednost = "";
   const { user } = useContext(AuthenticatedUserContext);
+  const onHandleAppointment = async () => {
+    try{
+      if (name !== '' && lastname !== '' && address !== '' && post !== '' && ZZZS !== ''){
+        up
+        .collection("Napotnica")
+        .doc(auth.currentUser.uid)
+        .set({name,
+          lastname,
+          address,
+          post,
+          ZZZS,
+          prednost,
+          datum
+        })
+        .then(() => {
+          alert ('Napotnica oddana');
+          console.log("Appointment added!");
+          navigation.navigate('Home')
+        });
+      } 
+    }catch (error) {
+    alert ('Sorry wrong values.');
+    console.log(error);
+    }
+  }
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -17,6 +52,14 @@ export default function HomeScreen({ navigation }) {
       console.log(error);
     }
   };
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Redno', value: 'redno'},
+    {label: 'Hitro', value: 'hitro'},
+    {label: 'Zelo Hitro', value: 'zeloHitro'}
+  ]);
+
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
@@ -33,43 +76,88 @@ export default function HomeScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Ime"
-        keyboardType="numeric"
+        keyboardType="default"
+        textContentType='name'
+        value={name}
+        onChangeText={text => setName(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Priimek"
-        keyboardType="numeric"
+        keyboardType="default"
+        textContentType='name'
+        value={lastname}
+        onChangeText={text => setLastName(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Ulica in hišna številka"
-        keyboardType="numeric"
+        keyboardType="default"
+        textContentType='streetAddressLine1'
+        value={address}
+        onChangeText={text => setAddress(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="pošta in poštna številka"
-        keyboardType="numeric"
+        keyboardType="default"
+        textContentType='streetAddressLine2'
+        value={post}
+        onChangeText={text => setPost(text)}
       />
       <TextInput
         style={styles.input}
         placeholder="številka ZZZS kartice"
-        keyboardType="numeric"
+        keyboardType="number-pad"
+        value={ZZZS}
+        onChangeText={text => setZZZS(text)}        
       />
-       <RNButton
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        onChangeValue={(value) => {
+          prednost = value;
+          console.log(value);
+        }}
+      />
+      <Button
         style={styles.button}
         title="SLIKA NAPOTNICE"
         size = {50}
-        onPress={() => navigation.navigate('Home')}
+        backgroundColor = '#3399ff'
+        onPress={() => navigation.navigate('UploadScreen')}
+        containerStyle={{
+          marginBottom: 24
+        }}
       />
-      <RNButton
+      <Button
+        onPress={onHandleAppointment}
+        backgroundColor='#f57c00'
+        title='Pošlji Napotnico'
+        tileColor='#fff'
+        titleSize={20}
+        containerStyle={{
+          marginBottom: 24
+        }}
+      />
+      <Button
         title="HOME"
         size = {50}
+        backgroundColor = '#3399ff'
         onPress={() => navigation.navigate('Home')}
+        containerStyle={{
+          marginBottom: 24
+        }}
       />
       
-      <RNButton
+      <Button
         title="Samoplačniško"
         size = {50}
+        backgroundColor = '#3399ff'
         onPress={() => navigation.navigate('Samoplacnik')}
       />
     </View>
@@ -107,7 +195,6 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingBottom: 20,
-    
-    alignItems: 'left',
-  }
+    marginBottom: 20
+  },
 });

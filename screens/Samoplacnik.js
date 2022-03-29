@@ -22,7 +22,7 @@ export default function Samoplacnik({ navigation }) {
     try{
       if (name !== '' && lastname !== '' && address !== '' && post !== '' && obiski !== ''){
         up
-        .collection("Napotnica")
+        .collection("Samoplacnisko")
         .doc(auth.currentUser.uid)
         .set({name,
           lastname,
@@ -34,6 +34,7 @@ export default function Samoplacnik({ navigation }) {
         .then(() => {
           alert ('Napotnica oddana');
           console.log("Appointment added!");
+          navigation.navigate('Home')
         });
       } 
     }catch (error) {
@@ -65,7 +66,7 @@ export default function Samoplacnik({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Ime"
-        keyboardType="numeric"
+        keyboardType="default"
         textContentType='name'
         value={name}
         onChangeText={text => setName(text)}
@@ -73,7 +74,7 @@ export default function Samoplacnik({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Priimek"
-        keyboardType="numeric"
+        keyboardType="default"
         textContentType='name'
         value={lastname}
         onChangeText={text => setLastName(text)}
@@ -81,7 +82,7 @@ export default function Samoplacnik({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Ulica in hišna številka"
-        keyboardType="numeric"
+        keyboardType="default"
         textContentType='streetAddressLine1'
         value={address}
         onChangeText={text => setAddress(text)}
@@ -89,7 +90,7 @@ export default function Samoplacnik({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="pošta in poštna številka"
-        keyboardType="numeric"
+        keyboardType="default"
         textContentType='streetAddressLine2'
         value={post}
         onChangeText={text => setPost(text)}
@@ -112,16 +113,24 @@ export default function Samoplacnik({ navigation }) {
           marginBottom: 24
         }}
       />
-      <RNButton
+      <Button
         title="Napotnica"
         size = {50}
+        backgroundColor='#3399ff'
         onPress={() => navigation.navigate('Napotnica')}
+        containerStyle={{
+          marginBottom: 24
+        }}
       />
       
-      <RNButton
+      <Button
         title="Home"
         size = {50}
+        backgroundColor= '#3399ff'
         onPress={() => navigation.navigate('Home')}
+        containerStyle={{
+          marginBottom: 24
+        }}
       />
     </View>
   );
