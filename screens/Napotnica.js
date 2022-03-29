@@ -12,6 +12,28 @@ const auth = Firebase.auth();
 const up = Firebase.firestore();
 const datum = new Date().toLocaleString()
 
+/*
+Napotnica -> datum, prednost
+nd = datum + 270 days if prednost == low
+nd = datum + 180 days if prednost == mid
+nd = datum + 30 days if prednost == high
+
+work = false
+while work == false:
+  .collection('nd')
+  .get()
+  .then(sd = collectionSnapshot.size)
+  if in sd > 6(low) dates:      #8 (mid) #10(high)
+        nd = nd + 1 day
+  else:
+        console.log("saved at: ", nd, " day.")
+        work = true
+
+.doc(nd)
+.set({name, lastname, auth.currentUser.uid})
+
+*/
+
 export default function HomeScreen({ navigation }) {
   const [name, setName] = useState('');
   const [lastname, setLastName] = useState('');
