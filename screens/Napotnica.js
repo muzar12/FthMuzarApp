@@ -20,6 +20,8 @@ nd = datum + 30 days if prednost == high
 
 work = false
 while work == false:
+  if nd.day == saturday, sunday:
+    nd = nd + 1 day
   .collection('nd')
   .get()
   .then(sd = collectionSnapshot.size)
@@ -27,11 +29,11 @@ while work == false:
         nd = nd + 1 day
   else:
         console.log("saved at: ", nd, " day.")
+        and for next 10 days for the same person at the same time 
         work = true
 
 .doc(nd)
 .set({name, lastname, auth.currentUser.uid})
-
 */
 
 export default function HomeScreen({ navigation }) {
