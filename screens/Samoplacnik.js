@@ -122,7 +122,6 @@ export default function Samoplacnik({ navigation }) {
           marginBottom: 24
         }}
       />
-      
       <Button
         title="Home"
         size = {50}

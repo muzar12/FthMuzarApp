@@ -7,7 +7,7 @@ const manageFileUpload = async (
   { onStart, onProgress, onComplete, onFail }
 ) => {
 
-  const imgName = auth.currentUser.uid;
+  const imgName = auth.currentUser.uid + "_" + Date.now();
  
    const storageRef = firebase.storage().ref(`images/${imgName}.jpg`);
 

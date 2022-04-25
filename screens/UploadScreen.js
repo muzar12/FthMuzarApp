@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Button,
   Platform,
   useWindowDimensions,
 } from "react-native";
@@ -14,7 +15,7 @@ import uplodImageFromDevice from "../photoUpload/uploadImageFromDevice";
 import getBlobFromUri from "../photoUpload/getBlobFromUri";
 import manageFileUpload from "../photoUpload/manageFileUpload";
 
-export default function App() {
+export default function UploadScreen({ navigation }) {
   const [imgURI, setImageURI] = React.useState(null);
 
   const [isUploading, setIsUploading] = React.useState(false);
@@ -61,7 +62,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Attach and upload image</Text>
+      <Text style={styles.heading}>Izberite sliko in jo naložite</Text>
       {Boolean(imgURI) && (
         <View>
           <Image
@@ -101,9 +102,9 @@ export default function App() {
       {Boolean(remoteURL) && (
         <View style={{ paddingVertical: 20 }}>
           <Text>
-            Image has been uploaded at
-            <Text style={{ color: "blue" }}> {remoteURL} </Text>
+            Slika je naložena. Pritisnite nazaj
           </Text>
+          <Button title="Nazaj" onPress={() => navigation.navigate('Napotnica')} />
         </View>
       )}
     </View>
