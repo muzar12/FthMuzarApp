@@ -7,34 +7,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { Button, IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
+import appointments from '../handleAppointments/appointments';
 
 const auth = Firebase.auth();
-const up = Firebase.firestore();
+const db = Firebase.firestore();
 const datum = new Date().toLocaleString()
-
-/*
-Napotnica -> datum, prednost
-nd = datum + 270 days if prednost == low
-nd = datum + 180 days if prednost == mid
-nd = datum + 30 days if prednost == high
-
-work = false
-while work == false:
-  if nd.day == saturday, sunday:
-    nd = nd + 1 day
-  .collection('nd')
-  .get()
-  .then(sd = collectionSnapshot.size)
-  if in sd > 6(low) dates:      #8 (mid) #10(high)
-        nd = nd + 1 day
-  else:
-        console.log("saved at: ", nd, " day.")
-        and for next 10 days for the same person at the same time 
-        work = true
-
-.doc(nd)
-.set({name, lastname, auth.currentUser.uid})
-*/
 
 export default function HomeScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -47,7 +24,7 @@ export default function HomeScreen({ navigation }) {
   const onHandleAppointment = async () => {
     try{
       if (name !== '' && lastname !== '' && address !== '' && post !== '' && ZZZS !== ''){
-        up
+        db
         .collection("Napotnica")
         .doc(auth.currentUser.uid)
         .set({name,
@@ -61,7 +38,8 @@ export default function HomeScreen({ navigation }) {
         .then(() => {
           alert ('Napotnica oddana');
           console.log("Appointment added!");
-          navigation.navigate('Home')
+          appointments(name, lastname, prednost, auth.currentUser.uid);
+          navigation.navigate('Home');
         });
       } 
     }catch (error) {

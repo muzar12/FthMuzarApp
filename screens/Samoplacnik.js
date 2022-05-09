@@ -6,9 +6,10 @@ import { TextInput, StyleSheet, Text, View, Button as RNButton } from 'react-nat
 import { Button, IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
+import appointmentsSP from '../handleAppointments/appointmentsSP';
 
 const auth = Firebase.auth();
-const up = Firebase.firestore();
+const db = Firebase.firestore();
 const datum = new Date().toLocaleString()
 
 export default function Samoplacnik({ navigation }) {
@@ -21,7 +22,7 @@ export default function Samoplacnik({ navigation }) {
   const onHandleAppointment = async () => {
     try{
       if (name !== '' && lastname !== '' && address !== '' && post !== '' && obiski !== ''){
-        up
+        db
         .collection("Samoplacnisko")
         .doc(auth.currentUser.uid)
         .set({name,
@@ -33,6 +34,7 @@ export default function Samoplacnik({ navigation }) {
         })
         .then(() => {
           alert ('Napotnica oddana');
+          appointmentsSP(name, lastname, obiski, auth.currentUser.uid);
           console.log("Appointment added!");
           navigation.navigate('Home')
         });

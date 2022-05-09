@@ -8,10 +8,10 @@ const manageFileUpload = async (
 ) => {
 
   const imgName = auth.currentUser.uid + "_" + Date.now();
- 
-   const storageRef = firebase.storage().ref(`images/${imgName}.jpg`);
 
-   console.log('uploading file',imgName)
+  const storageRef = firebase.storage().ref(`images/${imgName}.jpg`);
+
+  console.log('uploading file', imgName)
 
   // Create file metadata including the content type
   /** @type {any} */
@@ -28,7 +28,7 @@ const manageFileUpload = async (
     (snapshot) => {
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    
+
       // Monitor uploading progress
       onProgress && onProgress(Math.fround(progress).toFixed(2));
 
@@ -49,7 +49,7 @@ const manageFileUpload = async (
 
         console.log("File available at", downloadURL);
       });
-    
+
     }
   );
 };
