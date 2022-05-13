@@ -14,6 +14,9 @@ const db = Firebase.firestore();
 const datum = new Date().toLocaleString()
 
 export default function HomeScreen({ navigation }) {
+  const day = new Date().getDate();
+  const minute = new Date().getMinutes();
+  const hour = new Date().getHours();
   const [name, setName] = useState('');
   const [lastname, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -26,7 +29,7 @@ export default function HomeScreen({ navigation }) {
       if (name !== '' && lastname !== '' && address !== '' && post !== '' && ZZZS !== ''){
         db
         .collection("Napotnica")
-        .doc(auth.currentUser.uid)
+        .doc(auth.currentUser.uid + "_"+ day + "_" + hour + ":" + minute)
         .set({name,
           lastname,
           address,

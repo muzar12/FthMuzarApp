@@ -13,6 +13,9 @@ const db = Firebase.firestore();
 const datum = new Date().toLocaleString()
 
 export default function Samoplacnik({ navigation }) {
+  const day = new Date().getDate();
+  const minute = new Date().getMinutes();
+  const hour = new Date().getHours();
   const [name, setName] = useState('');
   const [lastname, setLastName] = useState('');
   const [address, setAddress] = useState('');
@@ -24,7 +27,7 @@ export default function Samoplacnik({ navigation }) {
       if (name !== '' && lastname !== '' && address !== '' && post !== '' && obiski !== ''){
         db
         .collection("Samoplacnisko")
-        .doc(auth.currentUser.uid)
+        .doc(auth.currentUser.uid + "_"+ day + "_" + hour + ":" + minute)
         .set({name,
           lastname,
           address,

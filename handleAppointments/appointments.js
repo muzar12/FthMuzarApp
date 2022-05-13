@@ -4,83 +4,115 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 const datum = new Date()
 let nd = "";
-let sd = "";
+let sd = 0;
 let day = "";
 let work = false;
 
-const appointments = (ime, priimek, prednost, usid) => {
-  day = datum.getDay()
-  if (prednost == 'redno') {
-    nd = datum.setDate(datum.getDate() + 270)
-  }
-  else if (prednost == 'hitro') {
-    nd = datum.setDate(datum.getDate() + 180)
-  }
-  else if (prednost == 'zeloHitro') {
-    nd = datum.setDate(datum.getDate() + 30)
-  }
-  while (!work) {
+function processSaving(ime, priimek, prednost, usid) {
+  return new Promise((resolve) => {
+    db
+      .collection(nd.toDateString()) //dan v katerega shranimo
+      .get()
+      .then(querySnapshot => {
+        sd = querySnapshot.size //koliko jih je že v tem danu shranjenih
+        console.log("size: " + sd);
+        querySnapshot.forEach(documentSnapshot => {
+          console.log('User ID: ', documentSnapshot.id);
+        });
+        if (prednost == "redno" && sd < 6) {
+          saveNext10days(ime, priimek, usid); //shrani ga 
+          resolve("Done");
+        }
+        else if (prednost == "hitro" && sd < 10) {
+          saveNext10days(ime, priimek, usid); //shrani ga 
+          resolve("Done");
+        }
+        else if (prednost == "zeloHitro" && sd < 15) {
+          saveNext10days(ime, priimek, usid); //shrani ga 
+          resolve("Done");
+        } else {
+          console.log("Drugi dan napotnica.");
+          nd = new Date(datum.setDate(datum.getDate() + 1)) // gres na drugi dan
+          day += 1;
+          resolve("Next day");
+        }
+      })
+  })
+}
+
+function rightDay() {
+  return new Promise((resolve) => {
     if (day == '0') { //nedelja
-      nd += 1;
+      nd = new Date(datum.setDate(datum.getDate() + 1))
       day = 1;
+      resolve("Nedelja")
     }
     else if (day == '6') { //sobota
-      nd += 2;
+      nd = new Date(datum.setDate(datum.getDate() + 2))
       day = 1;
-    }
-    db
-      .collection('nd') //dan v katerega shranimo
-      .get()
-      .then((QuerySnapshot) => {
-        sd = QuerySnapshot.size //koliko jih je že v tem danu shranjenih
-        console.log('V tem danu jih je ' + sd);
-      });
-    if (sd < 6 && prednost == "redno") {
-      //shrani ga 
-      saveNext10days(ime, priimek, usid);
-      work = true;
-    }
-    else if (sd < 10 && prednost == "hitro") {
-      // shrani ga
-      //saveNext10days();
-      work = true;
-    }
-    else if (sd < 15 && prednost == "zeloHitro") {
-      // shrani ga
-      //saveNext10days(); 
-      work = true;
+      resolve("Sobota")
     }
     else {
-      nd += 1; // gres na drugi dan
+      resolve("Ni sobota, ne nedelja.")
     }
-  }
+  })
 }
 
 const saveNext10days = (ime, priimek, usid) => {
   for (let i = 0; i < 10; i++) {
-    if (day == '0') { //nedelja
-      nd += 1;
+    if (day == "6") {
+      nd = new Date(datum.setDate(datum.getDate() + 2)) //sobota
       day = 1;
+      i -= 1;
     }
-    else if (day == "6") {
-      nd += 2; //ce je sobota dodamo 2 dni da pridemo na ponedeljek
+    else if (day == '0') { //nedelja
+      nd = new Date(datum.setDate(datum.getDate() + 1))
       day = 1;
+      i -= 1;
     }
     else {
       db
-        .collection(nd)
-        .doc(datum.toDateString())
+        .collection(nd.toDateString())
+        .doc(usid + "_" + sd)
         .set({
           name: ime,
           lastName: priimek,
           userid: usid,
         })
-        .then(() => {
-          console.log('User added in ' + nd + " day.");
-        });
-      nd += 1; //gremo na naslednji dan
+      nd = new Date(datum.setDate(datum.getDate() + 1)) //gremo na naslednji dan
       day += 1;
+      console.log("Dan shranjen.")
     }
+  }
+}
+
+async function appointments(ime, priimek, prednost, usid) {
+  if (prednost == 'redno') {
+    nd = new Date(datum.setDate(datum.getDate() + 270))
+  }
+  else if (prednost == 'hitro') {
+    nd = new Date(datum.setDate(datum.getDate() + 180))
+  }
+  else if (prednost == 'zeloHitro') {
+    nd = new Date(datum.setDate(datum.getDate() + 30))
+  }
+  else {
+    console.log("Napaka prednost je: " + prednost)
+  }
+  day = datum.getDay()
+  try {
+    while (!work) {
+      const rday = await rightDay()
+      console.log("Day is " + rday)
+      const result = await processSaving(ime, priimek, prednost, usid)
+      console.log("Work = " + result)
+      if (result === "Done") {
+        work = true;
+      }
+    }
+  } catch (error) {
+    console.log(error)
+    console.log("NE DELA !")
   }
 }
 
