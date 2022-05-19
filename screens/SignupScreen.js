@@ -7,7 +7,7 @@ import { Button, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
 
 const auth = Firebase.auth();
-const up = Firebase.firestore();
+const db = Firebase.firestore();
 
 export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -37,14 +37,15 @@ export default function SignupScreen({ navigation }) {
         /*auth.onAuthStateChanged(function(user) {
           user.sendEmailVerification(); 
         });*/
-        up
+        db
           .collection("Users")
           .doc(auth.currentUser.uid)
           .set({
             name,
             lastname,
             number,
-            address
+            address,
+            email
           })
           .then(() => {
             console.log("User added!");
