@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button as RNButton, Alert } from 'react-native';
-
 import { Button, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
 
