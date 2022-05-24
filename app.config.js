@@ -6,9 +6,9 @@ export default{
     slug: "FthMuzarApp",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/logo.png",
     splash: {
-      image: './assets/splash.png',
+      image: './assets/logo.png',
       resizeMode: 'contain',
       backgroundColor: '#ffffff'
     },
@@ -23,12 +23,12 @@ export default{
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/icon.png",
+        foregroundImage: "./assets/logo.png",
         backgroundColor: "#FFFFFF"
       }
     },
     web: {
-      favicon: "./assets/icon.png"
+      favicon: "./assets/logo.png"
     },
     extra: {
       apiKey: process.env.API_KEY,

@@ -1,4 +1,6 @@
 import firebase from "firebase";
+import * as Notifications from 'expo-notifications';
+import { sendEmail } from "../sendingMail/send-email";
 
 const datum = new Date()
 const db = firebase.firestore();
@@ -94,6 +96,17 @@ async function appointmentsSP(ime, priimek, obiski, usid) {
         work = true;
       }
     }
+    const trigger = new Date(datum.setDate(datum.getDate() - 7 - obiski));
+    trigger.setMinutes(0);
+    trigger.setSeconds(0);
+    trigger.setHours(11);
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Obvestilo o terapiji !',
+        body: 'Ne pozabite, čez 7 dni imate prvo terapijo pri Fizioterapiji Mužar !'
+      },
+      trigger,
+    });
   } catch (error) {
     console.log(error)
     console.log("NE DELA !")

@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-
+  
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
           justifyContent: 'space-around',
         }}>
         <Text>Your expo push token: {expoPushToken}</Text>
-        <Button
+        <Button 
           title="Press to Send Notification"
           onPress={async () => {
             await sendPushNotification(expoPushToken);
@@ -99,9 +99,8 @@ async function sendPushNotification(expoPushToken) {
   const message = {
     to: expoPushToken,
     sound: 'default',
-    title: 'This is a test',
-    body: 'And here is the body!',
-    data: { someData: 'goes here' },
+    title: 'Obvestilo o terapiji !',
+    body: 'Ne pozabite, čez 7 dni imate prvo terapijo pri Fizioterapiji Mužar !'
   };
 
   await fetch('https://exp.host/--/api/v2/push/send', {
@@ -117,38 +116,42 @@ async function sendPushNotification(expoPushToken) {
 
 async function registerForPushNotificationsAsync() {
   let token;
-  if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
+  if (Platform.OS === 'android' || Platform.OS === 'ios') {
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+      db
+        .collection("Users")
+        .doc(auth.currentUser.uid)
+        .update({ token })
+        .then(() => { console.log("Added token!"); })
+    } else {
+      alert('Must use physical device for Push Notifications');
     }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
-      return;
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-    db
-      .collection("Users")
-      .doc(auth.currentUser.uid)
-      .update({ token })
-      .then(() =>{console.log("Added token!");})
+
+    return token;
   } else {
-    alert('Must use physical device for Push Notifications');
+    console.log("Notifications not supported on web.")
   }
-
-  if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'default',
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
-    });
-  }
-
-  return token;
 }
 
 const styles = StyleSheet.create({
