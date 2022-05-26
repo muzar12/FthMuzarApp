@@ -20,10 +20,10 @@ const db = Firebase.firestore();
 
 export default function HomeScreen({ navigation }) {
   const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
   const { user } = useContext(AuthenticatedUserContext);
+
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -56,6 +56,12 @@ export default function HomeScreen({ navigation }) {
       <StatusBar style='dark-content' />
       <View style={styles.row}>
         <Text style={styles.title}>Welcome {user.email}!</Text>
+        <IconButton
+          name='setting'
+          size={24}
+          color='#fff'
+          onPress={() => navigation.navigate('SettingsScreen')}
+        />
         <IconButton
           name='logout'
           size={24}

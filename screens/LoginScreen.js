@@ -101,7 +101,7 @@ export default function LoginScreen({ navigation }) {
       />
       <Button
         title="Forgot Password?"
-        onPress={() => navigation.navigate('forgotPassword')}
+        onPress={() => navigation.navigate('ForgotPassword')}
         titleStyle={{
           color: '#039BE5'
         }}

@@ -8,21 +8,8 @@ import Firebase from '../config/firebase';
 const auth = Firebase.auth();
 const sendEmail = auth.sendPasswordResetEmail
 
-export default function forgotPassword({ navigation }) {
+export default function ForgotPassword({ navigation }) {
     const [email, setEmail] = useState('');
-    const [passwordVisibility, setPasswordVisibility] = useState(true);
-    const [rightIcon, setRightIcon] = useState('eye');
-    const [loginError, setLoginError] = useState('');
-
-    const handlePasswordVisibility = () => {
-        if (rightIcon === 'eye') {
-            setRightIcon('eye-off');
-            setPasswordVisibility(!passwordVisibility);
-        } else if (rightIcon === 'eye-off') {
-            setRightIcon('eye');
-            setPasswordVisibility(!passwordVisibility);
-        }
-    };
 
     const forgotPassword = async () => {
         try {
