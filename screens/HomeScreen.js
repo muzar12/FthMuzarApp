@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
           justifyContent: 'space-around',
         }}>
         <Text>Your expo push token: {expoPushToken}</Text>
-        <Button 
+        <Button
           title="Press to Send Notification"
           onPress={async () => {
             await sendPushNotification(expoPushToken);
@@ -129,12 +129,10 @@ async function registerForPushNotificationsAsync() {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
       db
         .collection("Users")
         .doc(auth.currentUser.uid)
         .update({ token })
-        .then(() => { console.log("Added token!"); })
     } else {
       alert('Must use physical device for Push Notifications');
     }
@@ -147,10 +145,9 @@ async function registerForPushNotificationsAsync() {
         lightColor: '#FF231F7C',
       });
     }
-
     return token;
   } else {
-    console.log("Notifications not supported on web.")
+    console.log("Expo notifications not supported on web.")
   }
 }
 

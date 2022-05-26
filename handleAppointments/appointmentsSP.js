@@ -96,7 +96,7 @@ async function appointmentsSP(ime, priimek, obiski, usid) {
         work = true;
       }
     }
-    const trigger = new Date(datum.setDate(datum.getDate() - 7 - obiski));
+    const trigger = new Date(datum.setDate(datum.getDate() - 8 - obiski));
     trigger.setMinutes(0);
     trigger.setSeconds(0);
     trigger.setHours(11);

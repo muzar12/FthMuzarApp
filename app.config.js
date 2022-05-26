@@ -6,7 +6,7 @@ export default{
     slug: "FthMuzarApp",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/logo.png",
+    icon: "./assets/logo1.png",
     splash: {
       image: './assets/logo.png',
       resizeMode: 'contain',
@@ -23,7 +23,7 @@ export default{
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/logo.png",
+        foregroundImage: "./assets/logo1.png",
         backgroundColor: "#FFFFFF"
       }
     },

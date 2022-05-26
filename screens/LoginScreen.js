@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button as RNButton } from 'react-native';
-
 import { Button, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
 
@@ -99,6 +98,14 @@ export default function LoginScreen({ navigation }) {
         onPress={() => navigation.navigate('Signup')}
         title='Go to Signup'
         color='#00008B'
+      />
+      <Button
+        title="Forgot Password?"
+        onPress={() => navigation.navigate('forgotPassword')}
+        titleStyle={{
+          color: '#039BE5'
+        }}
+        type="clear"
       />
     </View>
   );
