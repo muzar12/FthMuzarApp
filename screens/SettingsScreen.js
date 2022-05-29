@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button as RNButton, Platform } from 'react-native';
-import { Button, InputField, ErrorMessage } from '../components';
+import { Button, IconButton, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
 
 const auth = Firebase.auth();
@@ -14,6 +14,14 @@ export default function SettingsScreen({ navigation }) {
     const [passwordVisibility, setPasswordVisibility] = useState(true);
     const [rightIcon, setRightIcon] = useState('eye');
     const [loginError, setLoginError] = useState('');
+
+    const handleSignOut = async () => {
+        try {
+            await auth.signOut();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handlePasswordVisibility = () => {
         if (rightIcon === 'eye') {
@@ -53,8 +61,24 @@ export default function SettingsScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar style='dark-content' />
-            <Text style={styles.title}>Settings Screen</Text>
-            <Text style={styles.title}>1st you have to authenticate and than you can change your password or email.</Text>
+            <View style={styles.row}>
+                <IconButton
+                    name='setting'
+                    size={24}
+                    color='#fff'
+                    onPress={() => navigation.navigate('SettingsScreen')}
+                />
+                <IconButton
+                    name='logout'
+                    size={24}
+                    color='#fff'
+                    onPress={handleSignOut}
+                />
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.title}>Nastavitve !</Text>
+                <Text style={styles.title}>Najprej se morate autenticirati !</Text>
+            </View>
             <InputField
                 inputStyle={{
                     fontSize: 14

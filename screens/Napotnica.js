@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import { TextInput, StyleSheet, Text, View, Button as RNButton, Platform } from 'react-native';
 import { useState } from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
-
 import { Button, IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
@@ -69,7 +68,12 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar style='dark-content' />
       <View style={styles.row}>
-        <Text style={styles.title}>Welcome {user.email}!</Text>
+        <IconButton
+          name='setting'
+          size={24}
+          color='#fff'
+          onPress={() => navigation.navigate('SettingsScreen')}
+        />
         <IconButton
           name='logout'
           size={24}
@@ -77,7 +81,9 @@ export default function HomeScreen({ navigation }) {
           onPress={handleSignOut}
         />
       </View>
-      <Text style={styles.text}>THIS IS NAPOTNICA !</Text>
+      <View style={styles.row}>
+        <Text style={styles.title}>Welcome {user.name}!</Text>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Ime"

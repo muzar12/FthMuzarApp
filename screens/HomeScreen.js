@@ -55,7 +55,6 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <StatusBar style='dark-content' />
       <View style={styles.row}>
-        <Text style={styles.title}>Welcome {user.email}!</Text>
         <IconButton
           name='setting'
           size={24}
@@ -69,8 +68,9 @@ export default function HomeScreen({ navigation }) {
           onPress={handleSignOut}
         />
       </View>
-      <Text style={styles.text}>Your UID is: {user.uid} </Text>
-      <Text style={styles.text}> Hello ! This is Home Screen </Text>
+      <View style={styles.row}>
+        <Text style={styles.title}>Welcome {user.email}!</Text>
+      </View>
       <View style={styles.row}>
         <RNButton
           title="Napotnica"

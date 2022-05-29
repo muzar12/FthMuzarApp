@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useContext } from 'react';
 import { useState } from 'react';
 import { TextInput, StyleSheet, Text, View, Button as RNButton } from 'react-native';
-
 import { Button, IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
@@ -60,13 +59,21 @@ export default function Samoplacnik({ navigation }) {
     <View style={styles.container}>
       <StatusBar style='dark-content' />
       <View style={styles.row}>
-        <Text style={styles.title}>Welcome {user.email}!</Text>
+        <IconButton
+          name='setting'
+          size={24}
+          color='#fff'
+          onPress={() => navigation.navigate('SettingsScreen')}
+        />
         <IconButton
           name='logout'
           size={24}
           color='#fff'
           onPress={handleSignOut}
         />
+      </View>
+      <View style={styles.row}>
+        <Text style={styles.title}>Welcome {user.name}!</Text>
       </View>
       <TextInput
         style={styles.input}
