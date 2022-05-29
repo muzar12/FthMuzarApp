@@ -9,11 +9,16 @@ import {
   useWindowDimensions,
 } from "react-native";
 import Constants from "expo-constants";
+import { StatusBar } from 'expo-status-bar';
+import { IconButton } from '../components';
 import firebase from "../config/firebase";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import uplodImageFromDevice from "../photoUpload/uploadImageFromDevice";
 import getBlobFromUri from "../photoUpload/getBlobFromUri";
 import manageFileUpload from "../photoUpload/manageFileUpload";
+import Firebase from '../config/firebase';
+
+const auth = Firebase.auth();
 
 export default function UploadScreen({ navigation }) {
   const [imgURI, setImageURI] = React.useState(null);
@@ -24,6 +29,14 @@ export default function UploadScreen({ navigation }) {
 
   const [error, setError] = React.useState(null);
   const { width } = useWindowDimensions();
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleLocalImageUpload = async () => {
     const fileURI = await uplodImageFromDevice();
@@ -62,9 +75,29 @@ export default function UploadScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Izberite sliko in jo naložite</Text>
+      <StatusBar style='dark-content' />
+      <View style={styles.row}>
+        <IconButton
+          name='leftcircle'
+          size={24}
+          color='#fff'
+          onPress={() => navigation.goBack()}
+        />
+        <Text style={styles.title}>Naloži napotnico</Text>
+        <IconButton
+          name='logout'
+          size={24}
+          color='#fff'
+          onPress={handleSignOut}
+        />
+      </View>
+      <View style={styles.container1}>
+        <View style={styles.row}>
+          <Text style={styles.title}>Izberite sliko in jo naložite</Text>
+        </View>
+      
       {Boolean(imgURI) && (
-        <View>
+        <View style={styles.row1}>
           <Image
             source={{ uri: imgURI }}
             resizeMode="contain"
@@ -72,7 +105,7 @@ export default function UploadScreen({ navigation }) {
           />
         </View>
       )}
-
+      </View>
       {!isUploading && (
         <View style={styles.row}>
           <AntDesign
@@ -87,6 +120,8 @@ export default function UploadScreen({ navigation }) {
               name="upload-cloud"
               size={36}
               color="black"
+              justifyContent="center"
+              alignItems="center"
               onPress={handleCloudImageUpload}
             />
           )}
@@ -115,16 +150,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#ecf0f1",
-    padding: 8,
+    backgroundColor: '#DDDDDD',
+    paddingTop: 50,
+    paddingHorizontal: 12
   },
-
-  row: {
+  container1: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "space-around",
-    flexDirection: "row",
+    justifyContent: "center",
+    backgroundColor: '#DDDDDD',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24
+  },
+  row1: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 24
   },
   uploadProgressContainer: {
     flex: 1,
@@ -136,4 +183,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    alignItems: "center",
+    textAlign: "center",
+    color: '#fff'
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'normal',
+    color: '#fff'
+  }
 });

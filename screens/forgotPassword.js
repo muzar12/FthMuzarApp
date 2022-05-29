@@ -32,7 +32,7 @@ export default function ForgotPassword({ navigation }) {
     return (
         <View style={styles.container}>
             <StatusBar style='dark-content' />
-            <Text style={styles.title}>Forgot password</Text>
+            <Text style={styles.title}>Pozabil sem geslo</Text>
             <InputField
                 inputStyle={{
                     fontSize: 14
@@ -42,7 +42,7 @@ export default function ForgotPassword({ navigation }) {
                     marginBottom: 20
                 }}
                 leftIcon='email'
-                placeholder='Enter email'
+                placeholder='Vnesi email'
                 autoCapitalize='none'
                 keyboardType='email-address'
                 textContentType='emailAddress'
@@ -53,25 +53,30 @@ export default function ForgotPassword({ navigation }) {
             <Button
                 onPress={forgotPassword}
                 backgroundColor='#f57c00'
-                title='Password RESET'
+                title='Pošlji email za ponastavitev gesla'
                 tileColor='#fff'
                 titleSize={20}
                 containerStyle={{
                     marginBottom: 24
                 }}
             />
-            <RNButton
+            <Button
                 onPress={() => navigation.navigate('Signup')}
-                title='Go to Signup'
-                color='#00008B'
+                title='Registracija'
+                backgroundColor='#3399ff'
+                titleSize={20}
+                containerStyle={{
+                    marginBottom: 24
+                  }}
             />
             <Button
-                title="Go to Login"
+                title="Prijava"
+                backgroundColor='#3399ff'
                 onPress={() => navigation.navigate('Login')}
-                titleStyle={{
-                    color: '#039BE5'
-                }}
-                type="clear"
+                titleSize={20}
+                containerStyle={{
+                    marginBottom: 24
+                  }}
             />
         </View>
     );
@@ -80,7 +85,7 @@ export default function ForgotPassword({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#e93b81',
+        backgroundColor: '#ADD8E6',
         paddingTop: 50,
         paddingHorizontal: 12
     },

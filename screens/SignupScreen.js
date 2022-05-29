@@ -64,7 +64,7 @@ export default function SignupScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
-      <Text style={styles.title}>Create new account</Text>
+      <Text style={styles.title}>Ustvarite nov račun</Text>
       <InputField
         inputStyle={{
           fontSize: 14
@@ -74,7 +74,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='account'
-        placeholder='Enter name'
+        placeholder='Vnesite ime'
         autoCapitalize='none'
         keyboardType='default'
         textContentType='name'
@@ -91,7 +91,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='account'
-        placeholder='Enter lastname'
+        placeholder='Vnesite priimek'
         autoCapitalize='none'
         keyboardType='default'
         textContentType='name'
@@ -108,7 +108,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='phone'
-        placeholder='Enter phone number'
+        placeholder='Vnesite telefonsko številko'
         autoCapitalize='none'
         keyboardType='number-pad'
         textContentType='telephoneNumber'
@@ -125,7 +125,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='map-marker'
-        placeholder='Enter address'
+        placeholder='Vnesite naslov'
         autoCapitalize='none'
         keyboardType='default'
         textContentType='streetAddressLine1'
@@ -142,7 +142,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='email'
-        placeholder='Enter email'
+        placeholder='Vnesite vaš email'
         autoCapitalize='none'
         keyboardType='email-address'
         textContentType='emailAddress'
@@ -159,7 +159,7 @@ export default function SignupScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='lock'
-        placeholder='Enter password'
+        placeholder='Vnesite geslo'
         autoCapitalize='none'
         autoCorrect={false}
         secureTextEntry={passwordVisibility}
@@ -173,17 +173,18 @@ export default function SignupScreen({ navigation }) {
       <Button
         onPress={onHandleSignup}
         backgroundColor='#f57c00'
-        title='Signup'
+        title='Registracija'
         tileColor='#fff'
         titleSize={20}
         containerStyle={{
           marginBottom: 24
         }}
       />
-      <RNButton
+      <Button
         onPress={() => navigation.navigate('Login')}
-        title='Go to Login'
-        color='#00008B'
+        title='Pojdi na prijavo'
+        titleSize={20}
+        backgroundColor='#3399ff'
       />
     </View>
   );
@@ -192,7 +193,7 @@ export default function SignupScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e93b81',
+    backgroundColor: '#ADD8E6',
     paddingTop: 50,
     paddingHorizontal: 12
   },

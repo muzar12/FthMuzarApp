@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, Button as RNButton, Platform } from 'react-native';
+import { StyleSheet, Text, View, Button as RNButton, Platform, SafeAreaView, ScrollView } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { Button, IconButton } from '../components';
+import { IconButton } from '../components';
 import Firebase from '../config/firebase';
 import { AuthenticatedUserContext } from '../navigation/AuthenticatedUserProvider';
 
@@ -17,6 +17,43 @@ Notifications.setNotificationHandler({
 
 const auth = Firebase.auth();
 const db = Firebase.firestore();
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Platform.OS === 'android' || Platform.OS === 'ios') {
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      db
+        .collection("Users")
+        .doc(auth.currentUser.uid)
+        .update({ token })
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+    return token;
+  } else {
+    console.log("Expo notifications not supported on web.")
+  }
+}
 
 export default function HomeScreen({ navigation }) {
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -61,6 +98,7 @@ export default function HomeScreen({ navigation }) {
           color='#fff'
           onPress={() => navigation.navigate('SettingsScreen')}
         />
+        <Text style={styles.title}>Domača stran</Text>
         <IconButton
           name='logout'
           size={24}
@@ -68,40 +106,38 @@ export default function HomeScreen({ navigation }) {
           onPress={handleSignOut}
         />
       </View>
-      <View style={styles.row}>
-        <Text style={styles.title}>Welcome {user.email}!</Text>
+      <View style={styles.container1}>
+        <View style={styles.row}>
+          <Text style={styles.title}>Pozdravljeni, prijavljen e-mail je: {user.email}</Text>
+        </View>
       </View>
-      <View style={styles.row}>
-        <RNButton
-          title="Napotnica"
-          size={50}
-          onPress={() => navigation.navigate('Napotnica')}
-        />
-        <RNButton
-          title="Samoplačniško"
-          size={50}
-          onPress={() => navigation.navigate('Samoplacnik')}
-        />
-      </View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
-        <Text>Your expo push token: {expoPushToken}</Text>
-        <Button
-          title="Press to Send Notification"
-          onPress={async () => {
-            await sendPushNotification(expoPushToken);
-          }}
-        />
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <RNButton
+            title="Napotnica"
+            size={50}
+            onPress={() => navigation.navigate('Napotnica')}
+          />
+          <RNButton
+            title="Samoplačniško"
+            size={50}
+            onPress={() => navigation.navigate('Samoplacnik')}
+          />
+        </View>
+        <SafeAreaView style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+            <Text style={styles.textTerapij}>Naročeni ste: </Text>
+            <Text style={styles.textTerapij}>{"\n"}1. terapija 22.3.2022</Text>
+            <Text style={styles.textTerapij}>{"\n"}2. terapija 23.3.2022</Text>
+            <Text style={styles.textTerapij}>{"\n"}3. terapija 24.3.2022</Text>
+          </ScrollView>
+        </SafeAreaView>
       </View>
     </View>
   );
 }
 
-async function sendPushNotification(expoPushToken) {
+/*async function sendPushNotification(expoPushToken) {
   const message = {
     to: expoPushToken,
     sound: 'default',
@@ -118,51 +154,25 @@ async function sendPushNotification(expoPushToken) {
     },
     body: JSON.stringify(message),
   });
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-  if (Platform.OS === 'android' || Platform.OS === 'ios') {
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-      db
-        .collection("Users")
-        .doc(auth.currentUser.uid)
-        .update({ token })
-    } else {
-      alert('Must use physical device for Push Notifications');
-    }
-
-    if (Platform.OS === 'android') {
-      Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
-    return token;
-  } else {
-    console.log("Expo notifications not supported on web.")
-  }
-}
+}*/
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#ADD8E6',
     paddingTop: 50,
     paddingHorizontal: 12
+  },
+  container1: {
+    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12
+  },
+  scrollView: {
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    marginBottom: 50
   },
   row: {
     flexDirection: 'row',
@@ -179,5 +189,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'normal',
     color: '#fff'
+  },
+  textTerapij: {
+    flexDirection: "row",
+    marginBottom: 10,
+    fontSize: 16,
+    textAlign: "center",
+    color: "#000",
+    fontWeight: 'normal',
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center"
   }
 });

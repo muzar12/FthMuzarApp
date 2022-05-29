@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button as RNButton, Platform } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Button, IconButton, InputField, ErrorMessage } from '../components';
 import Firebase from '../config/firebase';
 
@@ -33,29 +33,31 @@ export default function SettingsScreen({ navigation }) {
         }
     };
 
-    const reauthenticate = async (currPassword) => {
-        var user = auth.currentUser;
-        var cred = auth.EmailAuthProvider.credential(
-            user.email, currPassword);
-        return user.reauthenticateWithCredential(cred);
+    function emailCred() {
+        try {
+            auth.EmailAuthProvider.credential(auth.currentUser, currentPassword);
+        } catch (error) {
+            console.log(error + "Napaka pri reautentikaciji.");
+        }
     }
 
-    const changePassword = async (currPassword, newPassword) => {
-        this.reauthenticate(currPassword).then(() => {
-            var user = auth.currentUser;
-            user.updatePassword(newPassword).then(() => {
-                console.log("Password updated!");
+    async function changePassword() {
+        await auth.currentUser.reauthenticateWithCredential(emailCred)
+            .then(() => {
+                // User successfully reauthenticated.
+                return auth.currentUser.updatePassword(NewPassword);
             }).catch((error) => { console.log(error); });
-        }).catch((error) => { console.log(error); });
     }
 
-    const changeEmail = async (currPassword, newEmail) => {
-        this.reauthenticate(currPassword).then(() => {
-            var user = auth.currentUser;
-            user.updateEmail(newEmail).then(() => {
-                console.log("Email updated!");
+    async function changeEmail() {
+        await auth.currentUser.reauthenticateWithCredential(emailCred)
+            .then(() => {
+                // User successfully reauthenticated.
+                var user = auth.currentUser;
+                user.updateEmail(newEmail).then(() => {
+                    console.log("Email updated!");
+                })
             }).catch((error) => { console.log(error); });
-        }).catch((error) => { console.log(error); });
     }
 
     return (
@@ -63,11 +65,12 @@ export default function SettingsScreen({ navigation }) {
             <StatusBar style='dark-content' />
             <View style={styles.row}>
                 <IconButton
-                    name='setting'
+                    name='leftcircle'
                     size={24}
                     color='#fff'
-                    onPress={() => navigation.navigate('SettingsScreen')}
+                    onPress={() => navigation.goBack()}
                 />
+                <Text style={styles.title}>Nastavitve</Text>
                 <IconButton
                     name='logout'
                     size={24}
@@ -76,8 +79,7 @@ export default function SettingsScreen({ navigation }) {
                 />
             </View>
             <View style={styles.row}>
-                <Text style={styles.title}>Nastavitve !</Text>
-                <Text style={styles.title}>Najprej se morate autenticirati !</Text>
+                <Text style={styles.title}>Pri menjavi gesla ali emaila, je potrebno vpisati trenutno geslo !</Text>
             </View>
             <InputField
                 inputStyle={{
@@ -88,7 +90,7 @@ export default function SettingsScreen({ navigation }) {
                     marginBottom: 20
                 }}
                 leftIcon='lock'
-                placeholder='Enter current password'
+                placeholder='Vnesite trenutno geslo'
                 autoCapitalize='none'
                 autoCorrect={false}
                 secureTextEntry={passwordVisibility}
@@ -99,16 +101,6 @@ export default function SettingsScreen({ navigation }) {
                 handlePasswordVisibility={handlePasswordVisibility}
             />
             {loginError ? <ErrorMessage error={loginError} visible={true} /> : null}
-            <Button
-                onPress={reauthenticate(currentPassword)}
-                backgroundColor='#f57c00'
-                title='Authenticate'
-                tileColor='#fff'
-                titleSize={20}
-                containerStyle={{
-                    marginBottom: 24
-                }}
-            />
             <InputField
                 inputStyle={{
                     fontSize: 14
@@ -118,7 +110,7 @@ export default function SettingsScreen({ navigation }) {
                     marginBottom: 20
                 }}
                 leftIcon='email'
-                placeholder='Enter new email'
+                placeholder='Vnestie nov email'
                 autoCapitalize='none'
                 keyboardType='email-address'
                 textContentType='emailAddress'
@@ -127,9 +119,9 @@ export default function SettingsScreen({ navigation }) {
                 onChangeText={text => setEmail(text)}
             />
             <Button
-                onPress={changeEmail(currentPassword, email)}
+                onPress={() => changeEmail()}
                 backgroundColor='#f57c00'
-                title='Password RESET'
+                title='Zamenjaj Email'
                 tileColor='#fff'
                 titleSize={20}
                 containerStyle={{
@@ -145,7 +137,7 @@ export default function SettingsScreen({ navigation }) {
                     marginBottom: 20
                 }}
                 leftIcon='lock'
-                placeholder='Enter new password'
+                placeholder='Vnesite novo geslo'
                 autoCapitalize='none'
                 autoCorrect={false}
                 secureTextEntry={passwordVisibility}
@@ -157,27 +149,14 @@ export default function SettingsScreen({ navigation }) {
             />
             {loginError ? <ErrorMessage error={loginError} visible={true} /> : null}
             <Button
-                onPress={changePassword(currentPassword, NewPassword)}
+                onPress={() => changePassword()}
                 backgroundColor='#f57c00'
-                title='change password'
+                title='Zamenjaj geslo'
                 tileColor='#fff'
                 titleSize={20}
                 containerStyle={{
                     marginBottom: 24
                 }}
-            />
-            <RNButton
-                onPress={() => navigation.navigate('Signup')}
-                title='Go to Signup'
-                color='#00008B'
-            />
-            <Button
-                title="Go to Login"
-                onPress={() => navigation.navigate('Login')}
-                titleStyle={{
-                    color: '#039BE5'
-                }}
-                type="clear"
             />
         </View>
     );
@@ -185,16 +164,25 @@ export default function SettingsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#e93b81',
-        paddingTop: 50,
-        paddingHorizontal: 12
+      flex: 1,
+      backgroundColor: '#ADD8E6',
+      paddingTop: 50,
+      paddingHorizontal: 12
+    },
+    row: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 24
     },
     title: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: '#fff',
-        alignSelf: 'center',
-        paddingBottom: 24
+      fontSize: 24,
+      fontWeight: '600',
+      color: '#fff'
+    },
+    text: {
+      fontSize: 16,
+      fontWeight: 'normal',
+      color: '#fff'
     }
-});
+  });

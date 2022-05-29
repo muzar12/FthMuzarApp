@@ -74,6 +74,7 @@ export default function HomeScreen({ navigation }) {
           color='#fff'
           onPress={() => navigation.navigate('SettingsScreen')}
         />
+        <Text style={styles.title}>Napotnica</Text>
         <IconButton
           name='logout'
           size={24}
@@ -81,12 +82,10 @@ export default function HomeScreen({ navigation }) {
           onPress={handleSignOut}
         />
       </View>
-      <View style={styles.row}>
-        <Text style={styles.title}>Welcome {user.name}!</Text>
-      </View>
       <TextInput
         style={styles.input}
         placeholder="Ime"
+        placeholderTextColor="#000"
         keyboardType="default"
         textContentType='name'
         value={name}
@@ -95,6 +94,7 @@ export default function HomeScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Priimek"
+        placeholderTextColor="#000"
         keyboardType="default"
         textContentType='name'
         value={lastname}
@@ -103,6 +103,7 @@ export default function HomeScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Ulica in hišna številka"
+        placeholderTextColor="#000"
         keyboardType="default"
         textContentType='streetAddressLine1'
         value={address}
@@ -111,6 +112,7 @@ export default function HomeScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="pošta in poštna številka"
+        placeholderTextColor="#000"
         keyboardType="default"
         textContentType='streetAddressLine2'
         value={post}
@@ -119,11 +121,13 @@ export default function HomeScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="številka ZZZS kartice"
+        placeholderTextColor="#000"
         keyboardType="number-pad"
         value={ZZZS}
         onChangeText={text => setZZZS(text)}        
       />
       <DropDownPicker
+        style={styles.selector}
         open={open}
         value={value}
         items={items}
@@ -137,9 +141,10 @@ export default function HomeScreen({ navigation }) {
       />
       <Button
         style={styles.button}
-        title="SLIKA NAPOTNICE"
+        title="NALOŽI SLIKO NAPOTNICE"
         size = {50}
-        backgroundColor = '#3399ff'
+        backgroundColor = '#3399'
+        titleSize={20}
         onPress={() => navigation.navigate('UploadScreen')}
         containerStyle={{
           marginBottom: 24
@@ -156,20 +161,14 @@ export default function HomeScreen({ navigation }) {
         }}
       />
       <Button
-        title="HOME"
+        title="DOMOV"
         size = {50}
         backgroundColor = '#3399ff'
+        titleSize={20}
         onPress={() => navigation.navigate('Home')}
         containerStyle={{
           marginBottom: 24
         }}
-      />
-      
-      <Button
-        title="Samoplačniško"
-        size = {50}
-        backgroundColor = '#3399ff'
-        onPress={() => navigation.navigate('Samoplacnik')}
       />
     </View>
   );
@@ -178,7 +177,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#ADD8E6',
     paddingTop: 50,
     paddingHorizontal: 12
   },
@@ -200,12 +199,21 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 12,
+    marginBottom: 12,
+    marginTop: 12,
+    backgroundColor: '#fff',
     borderWidth: 1,
+    padding: 10,
+  },
+  selector: {
+    height: 40,
+    marginTop: 12,
+    marginBottom: 12,
     padding: 10,
   },
   button: {
     paddingBottom: 20,
+    marginTop: 12,
     marginBottom: 20
   },
 });

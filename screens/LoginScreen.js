@@ -46,7 +46,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar style='dark-content' />
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Prijava</Text>
       <InputField
         inputStyle={{
           fontSize: 14
@@ -56,7 +56,7 @@ export default function LoginScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='email'
-        placeholder='Enter email'
+        placeholder='Vnesite email'
         autoCapitalize='none'
         keyboardType='email-address'
         textContentType='emailAddress'
@@ -73,7 +73,7 @@ export default function LoginScreen({ navigation }) {
           marginBottom: 20
         }}
         leftIcon='lock'
-        placeholder='Enter password'
+        placeholder='Vnesite geslo'
         autoCapitalize='none'
         autoCorrect={false}
         secureTextEntry={passwordVisibility}
@@ -87,25 +87,29 @@ export default function LoginScreen({ navigation }) {
       <Button
         onPress={onLogin}
         backgroundColor='#f57c00'
-        title='Login'
+        title='Prijava'
         tileColor='#fff'
         titleSize={20}
         containerStyle={{
           marginBottom: 24
         }}
       />
-      <RNButton
+      <Button
         onPress={() => navigation.navigate('Signup')}
-        title='Go to Signup'
-        color='#00008B'
+        title='Ustvarite nov račun'
+        backgroundColor='#3399ff'
+        titleSize={20}
+        containerStyle={{
+          marginBottom: 24
+        }}
       />
       <Button
-        title="Forgot Password?"
         onPress={() => navigation.navigate('ForgotPassword')}
-        titleStyle={{
-          color: '#039BE5'
+        title='Ste pozabili geslo ?'
+        backgroundColor='#3399ff'
+        containerStyle={{
+          marginBottom: 24
         }}
-        type="clear"
       />
     </View>
   );
@@ -114,7 +118,7 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e93b81',
+    backgroundColor: '#ADD8E6',
     paddingTop: 50,
     paddingHorizontal: 12
   },
