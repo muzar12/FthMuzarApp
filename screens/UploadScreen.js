@@ -136,8 +136,8 @@ export default function UploadScreen({ navigation }) {
 
       {Boolean(remoteURL) && (
         <View style={{ paddingVertical: 20 }}>
-          <Text>
-            Slika je naložena. Pritisnite nazaj
+          <Text style={styles.text}>
+            Slika je naložena. Pritisnite nazaj!
           </Text>
           <Button title="Nazaj" onPress={() => navigation.navigate('Napotnica')} />
         </View>
@@ -191,8 +191,10 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
+    alignItems: "center",
+    textAlign: "center",
     fontWeight: 'normal',
-    color: '#fff'
+    color: '#000'
   }
 });

@@ -127,6 +127,7 @@ export default function HomeScreen({ navigation }) {
         onChangeText={text => setZZZS(text)}        
       />
       <DropDownPicker
+        placeholder="Izberite prednost"
         style={styles.selector}
         open={open}
         value={value}

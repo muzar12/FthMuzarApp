@@ -127,9 +127,9 @@ export default function HomeScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <Text style={styles.textTerapij}>Naročeni ste: </Text>
-            <Text style={styles.textTerapij}>{"\n"}1. terapija 22.3.2022</Text>
-            <Text style={styles.textTerapij}>{"\n"}2. terapija 23.3.2022</Text>
-            <Text style={styles.textTerapij}>{"\n"}3. terapija 24.3.2022</Text>
+            <Text style={styles.textTerapij}>{"\n"}1. terapija 22.6.2022</Text>
+            <Text style={styles.textTerapij}>{"\n"}2. terapija 23.6.2022</Text>
+            <Text style={styles.textTerapij}>{"\n"}3. terapija 24.6.2022</Text>
           </ScrollView>
         </SafeAreaView>
       </View>
