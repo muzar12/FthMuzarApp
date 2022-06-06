@@ -62,7 +62,7 @@ export default function ForgotPassword({ navigation }) {
             />
             <Button
                 onPress={() => navigation.navigate('Signup')}
-                title='Registracija'
+                title='Ustvarite nov račun'
                 backgroundColor='#3399ff'
                 titleSize={20}
                 containerStyle={{
