@@ -1,6 +1,6 @@
 import firebase from "firebase";
+import { Platform } from "react-native";
 import * as Notifications from 'expo-notifications';
-import { sendEmail } from "../sendingMail/send-email";
 
 const db = firebase.firestore();
 const auth = firebase.auth();
@@ -117,13 +117,17 @@ async function appointments(ime, priimek, prednost, usid) {
     trigger.setSeconds(0);
     trigger.setHours(11);
     console.log(trigger + " triger");
-    Notifications.scheduleNotificationAsync({
-      content: {
-        title: 'Obvestilo o terapiji !',
-        body: 'Ne pozabite, čez 7 dni imate prvo terapijo pri Fizioterapiji Mužar !'
-      },
-      trigger,
-    });
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Obvestilo o terapiji !',
+          body: 'Ne pozabite, čez 7 dni imate prvo terapijo pri Fizioterapiji Mužar !'
+        },
+        trigger,
+      });
+    } else {
+      console.log("Expo notifications not supported on web.")
+    }
   } catch (error) {
     console.log(error)
     console.log("NE DELA !")

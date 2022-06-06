@@ -127,7 +127,7 @@ export default function HomeScreen({ navigation }) {
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <Text style={styles.textTerapij}>Naročeni ste: </Text>
-            <Text style={styles.textTerapij}>{"\n"}Trenutno še niste naročeni na terpije.</Text>
+            <Text style={styles.textTerapij}>{"\n"}Trenutno še niste naročeni na terapije.</Text>
           </ScrollView>
         </SafeAreaView>
       </View>
